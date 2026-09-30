@@ -146,9 +146,9 @@ class ActiveRoomController @Inject constructor(
         }
         try {
             val credentials = repository.rtcToken(room.id)
-            CallService.start(context, RtcSessionInfo(RtcSessionInfo.Kind.Room, room.title, video = false))
             val result = rtc.join(credentials, video = false, startWithMicOn = false)
             if (result != 0) throw AppException("rtc_failed")
+            CallService.start(context, RtcSessionInfo(RtcSessionInfo.Kind.Room, room.title, video = false))
             joinedChannel = credentials.channelName
             currentRole = role
         } catch (e: Exception) {

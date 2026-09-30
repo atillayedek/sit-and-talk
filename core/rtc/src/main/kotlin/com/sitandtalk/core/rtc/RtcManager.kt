@@ -35,6 +35,8 @@ class RtcManager @Inject constructor(
 ) {
     private var engine: RtcEngine? = null
     private var engineAppId: String? = null
+    // True while the microphone track is captured and published (a speaker without mic permission joins without it).
+    private var micPublishing = false
 
     private val _state = MutableStateFlow(RtcState())
     val state: StateFlow<RtcState> = _state.asStateFlow()
@@ -172,10 +174,11 @@ class RtcManager @Inject constructor(
     fun join(credentials: RtcCredentials, video: Boolean, startWithMicOn: Boolean): Int {
         val current = _state.value
         check(!current.isInChannel || current.channel == credentials.channelName) { "Already in another channel" }
-        if (credentials.canPublish && !hasMicPermission()) return Constants.ERR_ADM_GENERAL_ERROR
         val e = engineFor(credentials.appId)
         val publish = credentials.canPublish
-        val micOn = publish && startWithMicOn
+        // Without the permission the speaker still joins and hears the room; the mic is added once granted.
+        val micAvailable = publish && hasMicPermission()
+        val micOn = micAvailable && startWithMicOn
         if (video && publish) {
             e.enableVideo()
             e.setVideoEncoderConfiguration(
@@ -192,12 +195,14 @@ class RtcManager @Inject constructor(
         val options = ChannelMediaOptions().apply {
             channelProfile = Constants.CHANNEL_PROFILE_LIVE_BROADCASTING
             clientRoleType = if (publish) Constants.CLIENT_ROLE_BROADCASTER else Constants.CLIENT_ROLE_AUDIENCE
-            publishMicrophoneTrack = publish
+            publishMicrophoneTrack = micAvailable
             publishCameraTrack = video && publish
             autoSubscribeAudio = true
             autoSubscribeVideo = video
         }
+        e.enableLocalAudio(micAvailable)
         e.muteLocalAudioStream(!micOn)
+        micPublishing = micAvailable
         _state.value = RtcState(
             connection = RtcConnection.Connecting,
             channel = credentials.channelName,
@@ -224,11 +229,14 @@ class RtcManager @Inject constructor(
         val e = engine ?: return
         e.renewToken(credentials.token)
         val publish = credentials.canPublish
+        val micAvailable = publish && hasMicPermission()
+        e.enableLocalAudio(micAvailable)
         e.updateChannelMediaOptions(ChannelMediaOptions().apply {
             clientRoleType = if (publish) Constants.CLIENT_ROLE_BROADCASTER else Constants.CLIENT_ROLE_AUDIENCE
-            publishMicrophoneTrack = publish
+            publishMicrophoneTrack = micAvailable
         })
         e.muteLocalAudioStream(true)
+        micPublishing = micAvailable
         _state.update { it.copy(canPublish = publish, micMuted = true) }
     }
 
@@ -236,6 +244,12 @@ class RtcManager @Inject constructor(
     fun setMicMuted(muted: Boolean) {
         val e = engine ?: return
         if (!muted && (!_state.value.canPublish || !hasMicPermission())) return
+        if (!muted && !micPublishing) {
+            // Permission was granted after joining: start capturing and publishing the microphone now.
+            e.enableLocalAudio(true)
+            e.updateChannelMediaOptions(ChannelMediaOptions().apply { publishMicrophoneTrack = true })
+            micPublishing = true
+        }
         e.muteLocalAudioStream(muted)
         _state.update { it.copy(micMuted = muted, speaking = if (muted) it.speaking - 0 else it.speaking) }
     }
@@ -320,6 +334,7 @@ class RtcManager @Inject constructor(
         _state.value.remoteUsers.keys.forEach { uid -> e.setupRemoteVideo(VideoCanvas(null, VideoCanvas.RENDER_MODE_HIDDEN, uid)) }
         e.leaveChannel()
         e.disableVideo()
+        micPublishing = false
         _state.value = RtcState()
     }
 

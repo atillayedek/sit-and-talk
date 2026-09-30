@@ -165,9 +165,9 @@ class ActiveCallController @Inject constructor(
             val credentials = repository.rtcToken("call", state.sessionId)
             val video = state.mode == TalkMode.Video && rtc.hasCameraPermission()
             videoWanted = video
-            CallService.start(context, RtcSessionInfo(RtcSessionInfo.Kind.Call, state.peerProfile?.displayName ?: state.peerAlias.orEmpty(), video))
             val result = rtc.join(credentials, video = video, startWithMicOn = true)
             if (result != 0) throw AppException("rtc_failed")
+            CallService.start(context, RtcSessionInfo(RtcSessionInfo.Kind.Call, state.peerProfile?.displayName ?: state.peerAlias.orEmpty(), video))
             joinedChannel = credentials.channelName
         } catch (e: Exception) {
             val mapped = e.toAppException()

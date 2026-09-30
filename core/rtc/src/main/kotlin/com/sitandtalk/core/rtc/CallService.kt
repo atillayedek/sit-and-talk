@@ -12,7 +12,6 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
-import androidx.core.content.ContextCompat
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -90,10 +89,13 @@ class CallService : Service() {
                 .putExtra(EXTRA_KIND, info.kind.name)
                 .putExtra(EXTRA_TITLE, info.title)
                 .putExtra(EXTRA_VIDEO, info.video)
+            // A plain start (the app is in the foreground here) that then promotes itself. Unlike
+            // startForegroundService, a failed promotion (e.g. missing microphone permission) cannot crash the app.
             try {
-                ContextCompat.startForegroundService(context, intent)
+                context.startService(intent)
             } catch (_: IllegalStateException) {
                 // App not in the foreground; the call continues only while visible.
+            } catch (_: SecurityException) {
             }
         }
 
