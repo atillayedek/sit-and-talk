@@ -1,0 +1,31 @@
+# Supabase CLI configuration for the existing Sit & Talk project.
+# Link with: supabase link --project-ref <ref>   (the ref is not committed on purpose)
+project_id = "sit-and-talk"
+
+[auth]
+site_url = "https://sitandtalk.app"
+additional_redirect_urls = ["sitandtalk://auth-callback/signup", "sitandtalk://auth-callback/recovery", "sitandtalk://auth-callback/oauth"]
+enable_signup = true
+
+[auth.email]
+enable_signup = true
+enable_confirmations = true
+secure_password_change = true
+
+# User-called functions: the platform verifies the JWT, and the function verifies it again.
+[functions.agora-token]
+verify_jwt = true
+[functions.rtc-moderation]
+verify_jwt = true
+[functions.verify-purchase]
+verify_jwt = true
+[functions.delete-account]
+verify_jwt = true
+
+# Internal / webhook functions authenticate with their own shared secret.
+[functions.send-push]
+verify_jwt = false
+[functions.maintenance]
+verify_jwt = false
+[functions.play-rtdn]
+verify_jwt = false

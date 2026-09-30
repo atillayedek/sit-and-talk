@@ -16,6 +16,18 @@ permissions:
   contents: read
 
 jobs:
+  database:
+    name: Migrations + RLS/behaviour tests (PGlite)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci --prefix supabase/tests
+      - run: node supabase/tests/run.mjs
+
   check:
     name: Type-check Edge Functions
     runs-on: ubuntu-latest
@@ -35,7 +47,7 @@ jobs:
   deploy:
     name: Deploy to Supabase
     if: github.event_name == 'workflow_dispatch' && inputs.deploy
-    needs: check
+    needs: [database, check]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
