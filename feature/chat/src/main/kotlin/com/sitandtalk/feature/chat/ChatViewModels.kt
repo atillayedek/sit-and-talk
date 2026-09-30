@@ -1,12 +1,10 @@
 package com.sitandtalk.feature.chat
 
-import android.content.Context
-import android.media.MediaRecorder
 import android.net.Uri
-import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sitandtalk.core.data.AudioRecorder
 import com.sitandtalk.core.data.AuthRepository
 import com.sitandtalk.core.data.ChatItem
 import com.sitandtalk.core.data.ChatRepository
@@ -24,7 +22,6 @@ import com.sitandtalk.core.model.ReportTarget
 import com.sitandtalk.core.model.ServerTime
 import com.sitandtalk.core.network.toAppException
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -34,7 +31,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.io.File
 import java.time.Instant
 import javax.inject.Inject
 
@@ -123,11 +119,11 @@ data class ChatUiState(
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     savedState: SavedStateHandle,
-    @param:ApplicationContext private val context: Context,
     private val chat: ChatRepository,
     private val auth: AuthRepository,
     private val friends: FriendsRepository,
     private val moderation: ModerationRepository,
+    private val recorder: AudioRecorder,
 ) : ViewModel() {
     val conversationId: String = checkNotNull(savedState["conversationId"])
     val myId: String? = auth.currentUserId()
@@ -145,9 +141,6 @@ class ChatViewModel @Inject constructor(
         list.any { it.userId != myId && ServerTime.parse(it.typingUntil)?.isAfter(ServerTime.now()) == true }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
-    private var recorder: MediaRecorder? = null
-    private var recordFile: File? = null
-    private var recordStartedAt = 0L
     private var lastTypingPing = 0L
 
     init {
@@ -252,42 +245,16 @@ class ChatViewModel @Inject constructor(
     }
 
     fun startRecording(): Boolean {
-        return try {
-            val file = File.createTempFile("voice_", ".m4a", context.cacheDir)
-            val r = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) MediaRecorder(context) else @Suppress("DEPRECATION") MediaRecorder()
-            r.setAudioSource(MediaRecorder.AudioSource.MIC)
-            r.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-            r.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-            r.setAudioEncodingBitRate(64_000)
-            r.setAudioSamplingRate(44_100)
-            r.setMaxDuration(120_000)
-            r.setOutputFile(file.absolutePath)
-            r.prepare()
-            r.start()
-            recorder = r
-            recordFile = file
-            recordStartedAt = System.currentTimeMillis()
-            _state.update { it.copy(recording = true) }
-            true
-        } catch (e: Exception) {
-            _state.update { it.copy(error = AppException("upload_failed", cause = e), recording = false) }
-            false
-        }
+        val ok = recorder.start(maxDurationMs = 120_000)
+        _state.update { if (ok) it.copy(recording = true) else it.copy(recording = false, error = AppException("upload_failed")) }
+        return ok
     }
 
     fun stopRecording(send: Boolean) {
-        val r = recorder ?: return
-        val file = recordFile
-        val duration = (System.currentTimeMillis() - recordStartedAt).toInt()
-        runCatching { r.stop() }
-        r.release()
-        recorder = null
+        if (!recorder.isRecording) return
+        val clip = recorder.stop(keep = send)
         _state.update { it.copy(recording = false) }
-        if (send && file != null && duration >= 800) {
-            chat.sendVoice(conversationId, file, duration)
-        } else {
-            file?.delete()
-        }
+        if (clip != null) chat.sendVoice(conversationId, clip.first, clip.second)
     }
 
     fun consume() = _state.update { it.copy(error = null, info = null) }
@@ -303,7 +270,7 @@ class ChatViewModel @Inject constructor(
     }
 
     override fun onCleared() {
-        stopRecording(send = false)
+        recorder.release()
         super.onCleared()
     }
 }
