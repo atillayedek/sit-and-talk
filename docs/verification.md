@@ -4,7 +4,7 @@
 
 | Kontrol | Nasıl | Sonuç |
 | --- | --- | --- |
-| Android derleme, lint, birim testleri | GitHub Actions `android.yml` | Durum PR'daki son çalışmada; debug APK artifact olarak indirilebilir |
+| Android derleme, lint, birim testleri (bağlantı yönlendirme, zaman damgası ayrıştırma, canlı `app_bootstrap` yanıtının çözümlenmesi) | GitHub Actions `android.yml` | Durum PR'daki son çalışmada; debug APK artifact olarak indirilebilir |
 | Gizli bilgi taraması | gitleaks v8.28.0 | CI'da |
 | Migration'lar sıfırdan kurulum + RLS/RPC davranışı | PGlite, `supabase/tests/run.mjs` (31 kontrol) | Geçiyor |
 | Edge Function tip kontrolü ve lint | `deno check`, `deno lint` | Geçiyor |

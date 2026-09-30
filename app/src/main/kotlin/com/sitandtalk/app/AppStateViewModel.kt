@@ -34,7 +34,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import java.time.Instant
 import javax.inject.Inject
 
 sealed interface AppState {
@@ -185,7 +184,7 @@ class AppStateViewModel @Inject constructor(
         val now = ServerTime.now()
         val ringing = list.any { n ->
             n.kind == "incoming_call" && n.readAt == null &&
-                n.expiresAt?.let { runCatching { Instant.parse(it) }.getOrNull() }?.isAfter(now) == true
+                ServerTime.parse(n.expiresAt)?.isAfter(now) == true
         }
         if (ringing && activeCall.active.value == null && runCatching { activeCall.resumeIfAny() }.getOrDefault(false)) {
             _incomingCall.value = true

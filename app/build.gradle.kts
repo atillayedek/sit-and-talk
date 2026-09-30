@@ -148,4 +148,6 @@ dependencies {
     ksp(libs.androidx.hilt.compiler)
     implementation(libs.firebase.messaging)
     implementation(libs.kotlinx.serialization.json)
+
+    testImplementation(libs.junit)
 }

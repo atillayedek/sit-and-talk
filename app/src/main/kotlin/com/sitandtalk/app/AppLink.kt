@@ -23,14 +23,25 @@ sealed interface AppLink {
             val scheme = uri.scheme?.lowercase() ?: return null
             val host = uri.host?.lowercase().orEmpty()
             if (scheme == authScheme.lowercase() && host == authHost.lowercase()) return AuthCallback(uri)
+            return parseParts(scheme, host, uri.pathSegments, appLinkHost) { uri.getQueryParameter(it) }
+        }
+
+        /** Link routing without android.net.Uri, so it can be unit-tested on the JVM. */
+        fun parseParts(
+            scheme: String,
+            host: String,
+            pathSegments: List<String>,
+            appLinkHost: String,
+            query: (String) -> String?,
+        ): AppLink? {
             val segments: List<String> = when {
-                scheme == SCHEME -> listOf(host) + uri.pathSegments
-                scheme == "https" && appLinkHost.isNotBlank() && host == appLinkHost.lowercase() -> uri.pathSegments
+                scheme == SCHEME -> listOf(host) + pathSegments
+                scheme == "https" && appLinkHost.isNotBlank() && host == appLinkHost.lowercase() -> pathSegments
                 else -> return null
             }
             val id = segments.getOrNull(1)?.takeIf { UUID.matches(it) }
             return when (segments.firstOrNull()) {
-                "room", "r" -> id?.let { Room(it, uri.getQueryParameter("code")?.take(64)) }
+                "room", "r" -> id?.let { Room(it, query("code")?.take(64)) }
                 "post", "p" -> id?.let { Post(it) }
                 "chat" -> id?.let { Chat(it) }
                 "user", "u" -> id?.let { Profile(it) }

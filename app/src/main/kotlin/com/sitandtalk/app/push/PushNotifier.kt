@@ -15,6 +15,7 @@ import com.sitandtalk.app.AppLink
 import com.sitandtalk.app.MainActivity
 import com.sitandtalk.app.R
 import com.sitandtalk.feature.notifications.notificationTextRes
+import com.sitandtalk.core.model.ServerTime
 import java.time.Instant
 import com.sitandtalk.feature.notifications.R as NotifR
 
@@ -45,7 +46,7 @@ object PushNotifier {
         ) {
             return
         }
-        val expiresAt = data["expires_at"]?.let { runCatching { Instant.parse(it) }.getOrNull() }
+        val expiresAt = ServerTime.parse(data["expires_at"])
         if (expiresAt != null && expiresAt.isBefore(Instant.now())) return
 
         val titleKey = data["title_key"] ?: return
