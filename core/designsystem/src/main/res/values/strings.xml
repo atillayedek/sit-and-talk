@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ds_brand" translatable="false">Sit &amp; Talk</string>
+    <string name="ds_retry">Tekrar dene</string>
+    <string name="ds_retry_in_seconds">%1$s (%2$d sn)</string>
+    <string name="ds_cancel">Vazgeç</string>
+    <string name="ds_back">Geri</string>
+    <string name="ds_ok">Tamam</string>
+    <string name="ds_save">Kaydet</string>
+    <string name="ds_error_title">Bir sorun oluştu</string>
+    <string name="ds_show_password">Şifreyi göster</string>
+    <string name="ds_hide_password">Şifreyi gizle</string>
+    <string name="ds_report_title">Şikâyet et</string>
+    <string name="ds_report_details">Açıklama (isteğe bağlı)</string>
+    <string name="ds_report_send">Gönder</string>
+    <string name="ds_report_sent">Şikâyetin alındı. Ekibimiz inceleyecek.</string>
+    <string name="ds_reason_harassment">Taciz veya zorbalık</string>
+    <string name="ds_reason_hate">Nefret söylemi</string>
+    <string name="ds_reason_sexual">Cinsel içerik</string>
+    <string name="ds_reason_minor_safety">Çocuk güvenliği</string>
+    <string name="ds_reason_violence">Şiddet veya tehdit</string>
+    <string name="ds_reason_self_harm">Kendine zarar verme</string>
+    <string name="ds_reason_spam">Spam</string>
+    <string name="ds_reason_scam">Dolandırıcılık</string>
+    <string name="ds_reason_impersonation">Başkasını taklit etme</string>
+    <string name="ds_reason_underage">18 yaşından küçük olabilir</string>
+    <string name="ds_reason_other">Diğer</string>
+    <string name="ds_logo_description">Sit &amp; Talk logosu</string>
+    <string name="ds_time_left">Kalan süre %1$s</string>
+</resources>

@@ -1,0 +1,9 @@
+<resources>
+    <string name="rtc_channel_name">Devam eden görüşmeler</string>
+    <string name="rtc_channel_description">Görüşme veya oda açıkken gösterilir.</string>
+    <string name="rtc_notification_call">Görüşme devam ediyor</string>
+    <string name="rtc_notification_room">Sesli odadasın</string>
+    <string name="rtc_notification_tap">Dönmek için dokun.</string>
+    <string name="rtc_action_end">Bitir</string>
+    <string name="rtc_action_leave">Ayrıl</string>
+</resources>
