@@ -1,4 +1,4 @@
-import { createClient, type SupabaseClient, type User } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { ApiError, requiredEnv, timingSafeEqual } from "./http.ts";
 
 // Service-role client: bypasses RLS. Only used for server-owned writes and never exposed.
@@ -8,8 +8,10 @@ export function serviceClient(): SupabaseClient {
   });
 }
 
+export type AuthedUser = { id: string; email?: string };
+
 export type AuthedContext = {
-  user: User;
+  user: AuthedUser;
   jwt: string;
   // Client that acts as the caller, so database RLS and auth.uid() apply.
   db: SupabaseClient;
@@ -25,9 +27,15 @@ export async function requireUser(req: Request): Promise<AuthedContext> {
     auth: { persistSession: false, autoRefreshToken: false },
     global: { headers: { authorization: `Bearer ${jwt}` } },
   });
-  const { data, error } = await db.auth.getUser(jwt);
-  if (error || !data.user) throw new ApiError(401, "unauthorized", "Invalid or expired session");
-  return { user: data.user, jwt, db };
+  // getClaims verifies the signature (asymmetric keys via the project's JWKS, legacy HS256 via the
+  // Auth server) and expiry, without depending on how the platform exposes the anon key.
+  const { data, error } = await db.auth.getClaims(jwt);
+  const claims = data?.claims as { sub?: string; email?: string; role?: string } | undefined;
+  if (error || !claims?.sub || claims.role !== "authenticated") {
+    console.warn(JSON.stringify({ level: "warn", event: "auth_rejected", reason: error?.message ?? "no_subject" }));
+    throw new ApiError(401, "unauthorized", "Invalid or expired session");
+  }
+  return { user: { id: claims.sub, email: claims.email }, jwt, db };
 }
 
 // Maps a PostgREST / RPC error raised by app_private.err() to an API error.
