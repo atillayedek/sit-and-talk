@@ -259,9 +259,16 @@ class ChatRepository @Inject constructor(
         scope.launch { outbox.delete(outboxId) }
     }
 
+    @Volatile
+    private var recoveredFor: String? = null
+
     /** Sends everything still queued (app start, connectivity back). */
     suspend fun flushOutbox() {
         val uid = auth.currentUserId() ?: return
+        if (recoveredFor != uid) {
+            outbox.requeueInterrupted(uid)
+            recoveredFor = uid
+        }
         outbox.pending(uid).forEach { deliver(it.id) }
     }
 

@@ -63,4 +63,8 @@ interface OutboxDao {
 
     @Query("DELETE FROM message_outbox WHERE id = :id")
     suspend fun delete(id: String)
+
+    /** Sends interrupted by process death are retried; the stable id makes a repeat harmless. */
+    @Query("UPDATE message_outbox SET state = 'queued' WHERE ownerId = :ownerId AND state = 'sending'")
+    suspend fun requeueInterrupted(ownerId: String)
 }

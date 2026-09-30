@@ -81,15 +81,26 @@ fun interestName(interests: List<Interest>, slug: String?): String? = interestLa
 fun formatDateTime(iso: String?): String =
     ServerTime.parse(iso)?.atZone(ZoneId.systemDefault())?.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT)).orEmpty()
 
+/** A room link opened from outside the list (invite link or notification). */
+data class RoomJoinRequest(val roomId: String, val inviteCode: String?)
+
 @Composable
 fun RoomsScreen(
     onOpenRoom: (String) -> Unit,
     onCreateRoom: () -> Unit,
     onPlanEvent: () -> Unit,
     onStartEventRoom: (RoomEvent) -> Unit,
+    joinRequest: RoomJoinRequest? = null,
+    onJoinRequestHandled: () -> Unit = {},
     viewModel: RoomsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    LaunchedEffect(joinRequest) {
+        joinRequest?.let {
+            viewModel.joinById(it.roomId, inviteCode = it.inviteCode)
+            onJoinRequestHandled()
+        }
+    }
     val snackbar = remember { SnackbarHostState() }
     val errorText = state.error?.let { errorMessage(it) }
     LaunchedEffect(errorText) {

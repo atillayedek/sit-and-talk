@@ -268,6 +268,40 @@ data class ComposeState(
     }
 }
 
+data class StoryActionsState(val busy: Boolean = false, val error: AppException? = null, val reported: Boolean = false, val deleted: Boolean = false)
+
+@HiltViewModel
+class StoryActionsViewModel @Inject constructor(
+    private val feed: FeedRepository,
+    private val moderation: ModerationRepository,
+) : ViewModel() {
+    private val _state = MutableStateFlow(StoryActionsState())
+    val state: StateFlow<StoryActionsState> = _state.asStateFlow()
+
+    fun delete(storyId: String) = launchAction { feed.deleteStory(storyId); _state.update { it.copy(deleted = true) } }
+
+    fun report(storyId: String, reason: ReportReason, details: String) = launchAction {
+        moderation.report(ReportTarget.Story, storyId, reason, details)
+        _state.update { it.copy(reported = true) }
+    }
+
+    fun consume() = _state.update { it.copy(error = null, reported = false, deleted = false) }
+
+    private fun launchAction(block: suspend () -> Unit) {
+        if (_state.value.busy) return
+        viewModelScope.launch {
+            _state.update { it.copy(busy = true) }
+            try {
+                block()
+            } catch (e: Exception) {
+                _state.update { it.copy(error = e.toAppException()) }
+            } finally {
+                _state.update { it.copy(busy = false) }
+            }
+        }
+    }
+}
+
 @HiltViewModel
 class ComposeViewModel @Inject constructor(
     private val feed: FeedRepository,

@@ -64,6 +64,7 @@
     <string name="story_share">Hikâyeyi paylaş</string>
     <string name="story_expires">24 saat sonra kaybolur.</string>
     <string name="story_delete">Hikâyeyi sil</string>
+    <string name="story_delete_confirm">Bu hikâye kalıcı olarak silinecek.</string>
     <string name="story_next">Sonraki</string>
     <string name="story_close">Kapat</string>
 </resources>

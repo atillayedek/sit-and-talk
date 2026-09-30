@@ -24,6 +24,7 @@
     <string name="err_link_expired">Bağlantının süresi dolmuş ya da daha önce kullanılmış. Yeni bağlantı iste.</string>
     <string name="err_signup_disabled">Yeni kayıtlar şu anda kapalı.</string>
     <string name="err_validation_failed">Girdiğin bilgileri kontrol et.</string>
+    <string name="err_email_confirmed_sign_in">E-posta adresin doğrulandı. Şimdi giriş yapabilirsin.</string>
     <string name="err_auth_failed">Kimlik doğrulama başarısız oldu.</string>
     <string name="err_reauthentication_required">Güvenliğin için şifreni tekrar girmen gerekiyor.</string>
     <string name="err_already_onboarded">Profilin zaten tamamlanmış.</string>

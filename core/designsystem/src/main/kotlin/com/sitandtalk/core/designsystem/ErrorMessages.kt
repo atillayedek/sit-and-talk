@@ -39,6 +39,7 @@ fun errorRes(code: String): Int = when (code) {
     "same_password" -> R.string.err_same_password
     "user_banned" -> R.string.err_user_banned
     "link_expired" -> R.string.err_link_expired
+    "email_confirmed_sign_in" -> R.string.err_email_confirmed_sign_in
     "signup_disabled" -> R.string.err_signup_disabled
     "validation_failed" -> R.string.err_validation_failed
     "auth_failed" -> R.string.err_auth_failed

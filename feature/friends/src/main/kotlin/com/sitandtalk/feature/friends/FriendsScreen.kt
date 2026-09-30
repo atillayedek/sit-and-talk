@@ -40,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
@@ -95,8 +96,11 @@ class FriendsViewModel @Inject constructor(
     private val chat: ChatRepository,
     private val calls: CallRepository,
     private val activeCall: ActiveCallController,
+    savedState: SavedStateHandle,
 ) : ViewModel() {
-    private val _state = MutableStateFlow(FriendsState())
+    private val _state = MutableStateFlow(
+        FriendsState(tab = savedState.get<String>("tab")?.let { t -> FriendsTab.entries.firstOrNull { it.name.equals(t, true) } } ?: FriendsTab.Friends),
+    )
     val state: StateFlow<FriendsState> = _state.asStateFlow()
     private var searchJob: Job? = null
 

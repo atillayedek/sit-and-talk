@@ -103,7 +103,10 @@ private fun iconFor(kind: String): ImageVector = when (kind) {
 }
 
 @Composable
-fun notificationText(kind: String): String = stringResource(
+fun notificationText(kind: String): String = stringResource(notificationTextRes(kind))
+
+/** Text for a notification kind; also used to render data-only pushes on the device. */
+fun notificationTextRes(kind: String): Int =
     when (kind) {
         "friend_request" -> R.string.notif_friend_request
         "friend_accepted" -> R.string.notif_friend_accepted
@@ -117,8 +120,7 @@ fun notificationText(kind: String): String = stringResource(
         "purchase" -> R.string.notif_purchase
         "mutual_match" -> R.string.notif_mutual_match
         else -> R.string.notif_announcement
-    },
-)
+    }
 
 @Composable
 fun NotificationsScreen(onBack: () -> Unit, onOpen: (NotificationItem) -> Unit, viewModel: NotificationsViewModel = hiltViewModel()) {

@@ -490,10 +490,16 @@ fun CreateStoryScreen(onBack: () -> Unit, onPosted: () -> Unit, viewModel: Compo
 }
 
 @Composable
-fun StoryViewerScreen(startIndex: Int, onClose: () -> Unit, onDeleted: () -> Unit, onReport: (String) -> Unit, onDelete: (String) -> Unit) {
+fun StoryViewerScreen(startIndex: Int, onClose: () -> Unit, viewModel: StoryActionsViewModel = hiltViewModel()) {
     val groups = StoriesHolder.groups
+    val actions by viewModel.state.collectAsStateWithLifecycle()
     var groupIndex by rememberSaveable { mutableIntStateOf(startIndex) }
     var itemIndex by rememberSaveable { mutableIntStateOf(0) }
+    var reportFor by remember { mutableStateOf<String?>(null) }
+    var confirmDelete by remember { mutableStateOf<String?>(null) }
+    val snackbar = remember { SnackbarHostState() }
+    val errorText = actions.error?.let { errorMessage(it) }
+    val reportedText = stringResource(com.sitandtalk.core.designsystem.R.string.ds_report_sent)
     val group = groups.getOrNull(groupIndex)
     if (group == null || group.items.isEmpty()) {
         LaunchedEffect(Unit) { onClose() }
@@ -505,20 +511,29 @@ fun StoryViewerScreen(startIndex: Int, onClose: () -> Unit, onDeleted: () -> Uni
         else if (groupIndex < groups.lastIndex) { groupIndex++; itemIndex = 0 }
         else onClose()
     }
-    LaunchedEffect(groupIndex, itemIndex) {
+    val paused = reportFor != null || confirmDelete != null || actions.busy
+    LaunchedEffect(groupIndex, itemIndex, paused) {
+        if (paused) return@LaunchedEffect
         delay(6_000)
         advance()
     }
-    Box(Modifier.fillMaxSize().background(Color.Black).clickable { advance() }) {
+    LaunchedEffect(errorText, actions.reported, actions.deleted) {
+        when {
+            actions.deleted -> { viewModel.consume(); onClose() }
+            actions.reported -> { reportFor = null; snackbar.showSnackbar(reportedText); viewModel.consume() }
+            errorText != null -> { snackbar.showSnackbar(errorText); viewModel.consume() }
+        }
+    }
+    Box(Modifier.fillMaxSize().background(Color.Black).clickable(enabled = !paused) { advance() }) {
         RemoteImage(Buckets.STORIES, item.mediaPath, item.caption.ifBlank { null }, Modifier.fillMaxSize(), ContentScale.Fit)
         Row(Modifier.statusBarsPadding().padding(12.dp).fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Avatar(group.author.avatarPath, group.author.displayName, size = 32.dp)
             Spacer(Modifier.width(8.dp))
             Text(group.author.displayName + " · " + relativeTime(item.createdAt), color = Color.White, modifier = Modifier.weight(1f))
             if (group.isMine) {
-                StTextButton(stringResource(R.string.story_delete), { onDelete(item.id); onDeleted() })
+                StTextButton(stringResource(R.string.story_delete), { confirmDelete = item.id })
             } else {
-                StTextButton(stringResource(R.string.feed_report), { onReport(item.id) })
+                StTextButton(stringResource(R.string.feed_report), { reportFor = item.id })
             }
             IconButton(onClick = onClose) { Icon(Icons.Rounded.Close, stringResource(R.string.story_close), tint = Color.White) }
         }
@@ -527,6 +542,20 @@ fun StoryViewerScreen(startIndex: Int, onClose: () -> Unit, onDeleted: () -> Uni
                 Text(item.caption, color = Color.White, modifier = Modifier.padding(16.dp))
             }
         }
+        SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter).navigationBarsPadding())
+    }
+    reportFor?.let { id ->
+        ReportDialog(onSubmit = { reason, details -> viewModel.report(id, reason, details) }, onDismiss = { reportFor = null }, submitting = actions.busy)
+    }
+    confirmDelete?.let { id ->
+        ConfirmDialog(
+            title = stringResource(R.string.story_delete),
+            message = stringResource(R.string.story_delete_confirm),
+            confirmLabel = stringResource(R.string.story_delete),
+            onConfirm = { confirmDelete = null; viewModel.delete(id) },
+            onDismiss = { confirmDelete = null },
+            destructive = true,
+        )
     }
 }
 
