@@ -1,0 +1,10 @@
+title = "sit-and-talk gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Documentation placeholders"
+paths = [
+  '''.*\.example''',
+]
