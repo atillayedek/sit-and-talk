@@ -58,6 +58,8 @@ sealed interface ChatItem {
         override val id get() = outbox.id
         override val createdAtMillis get() = outbox.createdAtMillis
         val failed get() = outbox.state == OutboxMessageEntity.STATE_FAILED
+        val kind: String get() = outbox.kind
+        val body: String? get() = outbox.body
     }
 }
 

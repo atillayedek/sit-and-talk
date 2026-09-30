@@ -435,10 +435,10 @@ private fun PendingBubble(item: ChatItem.Pending, onRetry: () -> Unit, onDiscard
         Surface(shape = RoundedCornerShape(18.dp), color = MaterialTheme.colorScheme.primaryContainer, modifier = Modifier.widthIn(max = 300.dp)) {
             Column(Modifier.padding(horizontal = 12.dp, vertical = 8.dp)) {
                 Text(
-                    when (item.outbox.kind) {
+                    when (item.kind) {
                         "image" -> stringResource(R.string.chat_image)
                         "voice" -> stringResource(R.string.chat_voice)
-                        else -> item.outbox.body.orEmpty()
+                        else -> item.body.orEmpty()
                     },
                     style = MaterialTheme.typography.bodyLarge,
                 )
