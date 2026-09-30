@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="wallet_title">Cüzdan ve Premium</string>
+    <string name="wallet_balance">Jeton bakiyesi</string>
+    <string name="wallet_coins">%1$d jeton</string>
+    <string name="wallet_coins_note">Jetonlar yalnızca uygulama içinde hediye göndermek için kullanılır; paraya çevrilemez ve iade edilmez (Google Play iade kuralları saklıdır).</string>
+    <string name="wallet_premium">Premium</string>
+    <string name="wallet_premium_active">Premium aktif</string>
+    <string name="wallet_premium_until">Bitiş: %1$s</string>
+    <string name="wallet_premium_status">Durum: %1$s</string>
+    <string name="wallet_premium_benefits">Reklamsız kullanım, daha yüksek günlük eşleşme ve oda sınırı, daha büyük odalar. Engelleme, şikâyet ve hesap silme her zaman ücretsizdir.</string>
+    <string name="wallet_products">Satın al</string>
+    <string name="wallet_buy">Satın al</string>
+    <string name="wallet_restore">Satın alımları geri yükle</string>
+    <string name="wallet_history">Hareketler</string>
+    <string name="wallet_history_empty">Henüz hareket yok.</string>
+    <string name="wallet_store_unconfigured">Mağaza ürünleri henüz yapılandırılmadı. Satın alma şu anda mümkün değil.</string>
+    <string name="wallet_billing_unavailable">Google Play Faturalandırma bu cihazda kullanılamıyor.</string>
+    <string name="wallet_pending">Ödemen beklemede. Tamamlandığında bakiyene eklenecek.</string>
+    <string name="wallet_verified">Satın alma doğrulandı.</string>
+    <string name="wallet_cancelled">Satın alma iptal edildi.</string>
+    <string name="wallet_tx_purchase">Satın alma</string>
+    <string name="wallet_tx_gift_sent">Hediye gönderildi</string>
+    <string name="wallet_tx_refund_reversal">İade düzeltmesi</string>
+    <string name="wallet_tx_admin">Düzeltme</string>
+    <string name="wallet_subscription">Abonelik</string>
+</resources>

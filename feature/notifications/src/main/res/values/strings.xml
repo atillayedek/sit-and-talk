@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notif_title">Bildirimler</string>
+    <string name="notif_empty">Henüz bildirimin yok.</string>
+    <string name="notif_mark_all">Tümünü okundu yap</string>
+    <string name="notif_friend_request">Yeni bir arkadaşlık isteğin var.</string>
+    <string name="notif_friend_accepted">Arkadaşlık isteğin kabul edildi.</string>
+    <string name="notif_incoming_call">Seni arıyor.</string>
+    <string name="notif_missed_call">Cevapsız arama.</string>
+    <string name="notif_room_invite">Bir sesli odaya davet edildin.</string>
+    <string name="notif_event_reminder">Takip ettiğin etkinlik başlıyor.</string>
+    <string name="notif_comment">Paylaşımına yorum yapıldı.</string>
+    <string name="notif_reply">Yorumuna yanıt verildi.</string>
+    <string name="notif_moderation">Hesabınla ilgili bir moderasyon kararı var.</string>
+    <string name="notif_purchase">Satın alma durumun güncellendi.</string>
+    <string name="notif_mutual_match">İkiniz de tekrar konuşmak istediniz. Artık arkadaşsınız!</string>
+    <string name="notif_announcement">Duyuru</string>
+    <!-- Push notification texts (rendered on the device; the server sends only keys). -->
+    <string name="push_channel_messages">Mesajlar</string>
+    <string name="push_channel_calls">Aramalar</string>
+    <string name="push_channel_social">Sosyal</string>
+    <string name="push_channel_system">Hesap ve sistem</string>
+    <string name="push_message">Yeni mesaj</string>
+    <string name="push_message_from">%1$s sana mesaj gönderdi</string>
+    <string name="push_open">Aç</string>
+</resources>
