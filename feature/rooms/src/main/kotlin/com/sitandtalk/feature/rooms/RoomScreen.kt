@@ -61,6 +61,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -141,9 +142,10 @@ fun RoomScreen(onBack: () -> Unit, onOpenProfile: (String) -> Unit, viewModel: R
             viewModel.consumeControllerMessage()
         }
     }
+    val resources = LocalResources.current
     LaunchedEffect(extras.inviteLink) {
         extras.inviteLink?.let { link ->
-            val text = context.getString(R.string.room_share_text, room.title, link)
+            val text = resources.getString(R.string.room_share_text, room.title, link)
             context.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, text), null))
             viewModel.consume()
         }

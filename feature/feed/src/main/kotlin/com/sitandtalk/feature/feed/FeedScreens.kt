@@ -295,10 +295,10 @@ fun PostCard(post: Post, interests: List<Interest>, vm: PostActionsViewModel, on
             IconButton(onClick = onOpen) { Icon(Icons.Rounded.ChatBubbleOutline, stringResource(R.string.feed_comment)) }
             Text(post.commentCount.toString())
             Spacer(Modifier.weight(1f))
+            val shareText = stringResource(R.string.feed_share_text, "sitandtalk://post/${post.id}")
             IconButton(onClick = {
-                val link = "sitandtalk://post/${post.id}"
                 context.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).setType("text/plain")
-                    .putExtra(Intent.EXTRA_TEXT, context.getString(R.string.feed_share_text, link)), null))
+                    .putExtra(Intent.EXTRA_TEXT, shareText), null))
             }) { Icon(Icons.Rounded.Share, stringResource(R.string.feed_share)) }
             IconButton(onClick = { vm.toggleSave(post) }) {
                 Icon(if (post.saved) Icons.Rounded.Bookmark else Icons.Rounded.BookmarkBorder, stringResource(if (post.saved) R.string.feed_unsave else R.string.feed_save))
