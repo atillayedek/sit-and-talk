@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Uygulamaya dönülüyor · Sit &amp; Talk</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<header class="site"><div class="wrap bar"><a href="../index.html"><span>Sit &amp; Talk</span></a></div></header>
+<main class="wrap">
+  <div class="doc center" style="background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px;margin:24px 0 40px">
+    <h1 id="title">Uygulamaya dönülüyor…</h1>
+    <p id="body" class="muted">Sit &amp; Talk açılmadıysa aşağıdaki düğmeye dokun. Bu bağlantıyı, uygulamanın yüklü olduğu ve kaydı başlattığın telefonda açmalısın.</p>
+    <p><a id="open" class="btn solid" href="#">Sit &amp; Talk'u aç</a></p>
+    <p class="muted" id="hint" hidden>E-posta adresin doğrulandıysa uygulamadan e-posta ve şifrenle giriş yapabilirsin.</p>
+  </div>
+</main>
+<script>
+// Forwards an e-mail confirmation or password recovery link to the app. Only the one-time PKCE code
+// (useless without the verifier kept on the phone that started the flow) and error fields are passed on.
+(function () {
+  var params = new URLSearchParams(location.search);
+  var hash = new URLSearchParams(location.hash.replace(/^#/, ""));
+  var flow = params.get("flow");
+  if (flow !== "signup" && flow !== "recovery") flow = "signup";
+  var out = new URLSearchParams();
+  ["code", "error", "error_code", "error_description"].forEach(function (k) {
+    var v = params.get(k) || hash.get(k);
+    if (v) out.set(k, v.slice(0, 512));
+  });
+  var target = "sitandtalk://auth-callback/" + flow + (out.toString() ? "?" + out.toString() : "");
+  document.getElementById("open").setAttribute("href", target);
+  if (out.get("error") || out.get("error_code")) {
+    document.getElementById("title").textContent = "Bağlantı kullanılamıyor";
+    document.getElementById("body").textContent = "Bağlantının süresi dolmuş ya da daha önce kullanılmış olabilir. Uygulamadan yeni bir bağlantı isteyebilirsin.";
+  }
+  if (flow === "signup") document.getElementById("hint").hidden = false;
+  history.replaceState(null, "", location.pathname);
+  location.href = target;
+})();
+</script>
+</body>
+</html>

@@ -19,6 +19,7 @@ output-metadata.json
 *.jks
 *.keystore
 keystore.properties
+*.b64
 google-services.json
 .env
 .env.*

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="call_connecting">Görüşmeye bağlanıyor…</string>
+    <string name="call_waiting_peer">Karşı taraf bekleniyor…</string>
+    <string name="call_reconnecting">Bağlantı yeniden kuruluyor…</string>
+    <string name="call_active">Görüşme aktif</string>
+    <string name="call_ringing_out">Aranıyor…</string>
+    <string name="call_ringing_in">Gelen arama</string>
+    <string name="call_answer">Cevapla</string>
+    <string name="call_decline">Reddet</string>
+    <string name="call_end">Bitir</string>
+    <string name="call_mute">Mikrofonu kapat</string>
+    <string name="call_unmute">Mikrofonu aç</string>
+    <string name="call_mic_on">Mikrofon açık</string>
+    <string name="call_mic_off">Mikrofon kapalı</string>
+    <string name="call_speaker">Hoparlör</string>
+    <string name="call_speaker_on">Hoparlör açık</string>
+    <string name="call_speaker_off">Hoparlör kapalı</string>
+    <string name="call_route_bluetooth">Bluetooth</string>
+    <string name="call_route_headset">Kulaklık</string>
+    <string name="call_extend">Süreyi uzat</string>
+    <string name="call_extend_requested">Uzatma istendi</string>
+    <string name="call_extend_peer">%1$s süreyi uzatmak istiyor.</string>
+    <string name="call_extend_accept">Uzat</string>
+    <string name="call_extended">Süre uzatıldı.</string>
+    <string name="call_add_friend">Arkadaş ekle</string>
+    <string name="call_friend_request_sent">Arkadaşlık isteği gönderildi. Kabul ederse profili görünecek.</string>
+    <string name="call_gift">Hediye</string>
+    <string name="call_report">Şikâyet et</string>
+    <string name="call_block">Engelle</string>
+    <string name="call_block_confirm_title">Engellensin mi?</string>
+    <string name="call_block_confirm_body">Görüşme hemen biter ve bu kişiyle bir daha eşleşmezsin.</string>
+    <string name="call_also_block">Ayrıca engelle</string>
+    <string name="call_video_request">Görüntülüye geç</string>
+    <string name="call_video_requested">Görüntülü isteği gönderildi</string>
+    <string name="call_video_peer">%1$s görüntülü görüşmeye geçmek istiyor.</string>
+    <string name="call_video_accept">Kamerayı aç</string>
+    <string name="call_voice_request">Sesliye geç</string>
+    <string name="call_voice_peer">%1$s sesli görüşmeye geçmek istiyor.</string>
+    <string name="call_voice_accept">Sesliye geç</string>
+    <string name="call_stop_video">Kamerayı kapat</string>
+    <string name="call_camera_on">Kamera açık</string>
+    <string name="call_camera_off">Kamera kapalı</string>
+    <string name="call_switch_camera">Kamerayı çevir</string>
+    <string name="call_next">Sonraki</string>
+    <string name="call_peer_video_off">Karşı tarafın kamerası kapalı</string>
+    <string name="call_time_left">Kalan süre</string>
+    <string name="call_elapsed">Süre</string>
+    <string name="call_icebreaker">Konu önerisi</string>
+    <string name="call_icebreaker_next">Başka soru</string>
+    <string name="call_message_hint">Mesaj yaz</string>
+    <string name="call_send">Gönder</string>
+    <string name="call_typing">yazıyor…</string>
+    <string name="call_rtc_failed">Sesli bağlantı kurulamadı.</string>
+    <string name="call_retry">Tekrar bağlan</string>
+    <string name="call_mic_permission">Mikrofon izni olmadan sesli görüşme yapılamaz.</string>
+    <string name="call_ended_title">Görüşme bitti</string>
+    <string name="call_ended_time_up">Süre doldu.</string>
+    <string name="call_ended_peer">Görüşme sona erdi.</string>
+    <string name="call_ended_missed">Cevapsız arama.</string>
+    <string name="call_ended_declined">Arama reddedildi.</string>
+    <string name="call_ended_connect_failed">Bağlantı kurulamadı.</string>
+    <string name="call_ended_moderation">Görüşme güvenlik nedeniyle sonlandırıldı.</string>
+    <string name="call_again_question">Tekrar konuşmak ister misin?</string>
+    <string name="call_again_note">Seçimin karşı tarafa gösterilmez. İkiniz de evet derseniz arkadaş olursunuz.</string>
+    <string name="call_again_yes">Evet</string>
+    <string name="call_again_no">Hayır</string>
+    <string name="call_mutual">Harika! Artık arkadaşsınız.</string>
+    <string name="call_feedback_saved">Tercihin kaydedildi.</string>
+    <string name="call_new">Yeni görüşme</string>
+    <string name="call_close">Kapat</string>
+    <string name="call_open_chat">Mesaj gönder</string>
+    <string name="call_reported">Şikâyetin alındı.</string>
+    <string name="call_gifts_title">Hediye gönder</string>
+    <string name="call_gift_balance">Bakiyen: %1$d jeton</string>
+    <string name="call_gift_price">%1$d jeton</string>
+    <string name="call_gift_sent">Hediye gönderildi.</string>
+    <string name="call_gifts_empty">Şu anda gönderilebilecek hediye yok.</string>
+    <string name="call_gifts_disabled">Hediyeler şu anda kapalı.</string>
+    <string name="call_peer_alias">Rumuz: %1$s</string>
+    <string name="call_back">Geri</string>
+    <string-array name="icebreakers">
+        <item>Son zamanlarda seni en çok ne güldürdü?</item>
+        <item>Bir haftalığına herhangi bir şehirde yaşayabilseydin neresi olurdu?</item>
+        <item>En son hangi dizi veya filmi bitirdin?</item>
+        <item>Çocukken ne olmak istiyordun?</item>
+        <item>Hiç sıkılmadan saatlerce konuşabileceğin konu hangisi?</item>
+        <item>Bu yıl öğrendiğin en ilginç şey neydi?</item>
+        <item>Mükemmel bir hafta sonu senin için nasıl geçer?</item>
+        <item>Tekrar tekrar dinlediğin bir şarkı var mı?</item>
+        <item>Yeni bir dil öğrenecek olsan hangisini seçerdin?</item>
+        <item>Denemek istediğin ama henüz cesaret edemediğin bir şey var mı?</item>
+    </string-array>
+</resources>

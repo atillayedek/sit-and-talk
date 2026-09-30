@@ -1,0 +1,203 @@
+name: Android
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      release:
+        description: "Build signed release APK + AAB (requires signing secrets)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Public client configuration only. Server secrets are never passed to the Android build.
+  SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+  SUPABASE_PUBLISHABLE_KEY: ${{ vars.SUPABASE_PUBLISHABLE_KEY }}
+  AGORA_APP_ID: ${{ vars.AGORA_APP_ID }}
+  AUTH_REDIRECT_URL: ${{ vars.AUTH_REDIRECT_URL }}
+  APP_LINK_HOST: ${{ vars.APP_LINK_HOST }}
+  GOOGLE_WEB_CLIENT_ID: ${{ vars.GOOGLE_WEB_CLIENT_ID }}
+  FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
+  FIREBASE_APP_ID: ${{ vars.FIREBASE_APP_ID }}
+  FIREBASE_API_KEY: ${{ vars.FIREBASE_API_KEY }}
+  FIREBASE_SENDER_ID: ${{ vars.FIREBASE_SENDER_ID }}
+  SUPPORT_URL: ${{ vars.SUPPORT_URL }}
+  PRIVACY_URL: ${{ vars.PRIVACY_URL }}
+  TERMS_URL: ${{ vars.TERMS_URL }}
+  COMMUNITY_URL: ${{ vars.COMMUNITY_URL }}
+
+jobs:
+  debug:
+    name: Debug build, lint, unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: gradle/actions/wrapper-validation@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      # Same debug signing key across runs, so a newer test build installs over the previous one.
+      - name: Reuse debug signing key
+        uses: actions/cache@v4
+        with:
+          path: ~/.android/debug.keystore
+          key: android-debug-keystore-v1
+
+      - name: Assemble debug APK
+        shell: bash
+        run: |
+          set -o pipefail
+          ./gradlew --no-configuration-cache --continue :app:assembleDebug 2>&1 | tee build.log
+
+      - name: Android lint
+        shell: bash
+        run: |
+          set -o pipefail
+          ./gradlew --no-configuration-cache --continue :app:lintDebug 2>&1 | tee lint.log
+
+      - name: Unit tests
+        run: ./gradlew --no-configuration-cache testDebugUnitTest
+
+      - name: Build and lint errors summary
+        if: failure()
+        shell: bash
+        run: |
+          grep -hE "^e: |^> Task .* FAILED|error: |ERROR:|: Error: " build.log lint.log 2>/dev/null | sort -u | head -300 || true
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: sit-and-talk-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+
+      - name: Upload lint and test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: |
+            **/build/reports/lint-results-*.html
+            **/build/reports/tests/
+          if-no-files-found: ignore
+
+  secret-scan:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: gitleaks
+        run: |
+          docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:v8.28.0 \
+            detect --source /repo --config /repo/.gitleaks.toml --redact --verbose --exit-code 1
+
+  # Keeps one moving pre-release ("debug-latest") with the newest debug APK so testers can install it
+  # from a direct link on the phone. Never runs for pull requests from forks.
+  publish-debug:
+    name: Publish latest debug APK
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    needs: [debug, secret-scan]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    concurrency:
+      group: publish-debug
+      cancel-in-progress: true
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: sit-and-talk-debug-apk
+          path: apk
+      - name: Replace the debug-latest pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          cp apk/*.apk sit-and-talk-debug.apk
+          gh release delete debug-latest --cleanup-tag --yes 2>/dev/null || true
+          gh release create debug-latest sit-and-talk-debug.apk \
+            --target "$SHA" \
+            --prerelease \
+            --title "Sit & Talk — son test sürümü" \
+            --notes "Otomatik debug derlemesi (commit ${SHA:0:7}). Yalnızca test içindir; Play Store sürümü değildir. İmza anahtarı derlemeler arasında değişebildiği için güncellemede önce eski sürümü kaldırman gerekebilir."
+
+  release:
+    name: Signed release APK + AAB
+    if: startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && inputs.release)
+    needs: [debug, secret-scan]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Restore signing keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.SITANDTALK_KEYSTORE_BASE64 }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ]; then
+            echo "::error::SITANDTALK_KEYSTORE_BASE64 secret is missing — cannot produce a signed release."
+            exit 1
+          fi
+          echo "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release.jks"
+          echo "SITANDTALK_KEYSTORE_FILE=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
+
+      - name: Build release APK and AAB
+        env:
+          SITANDTALK_KEYSTORE_PASSWORD: ${{ secrets.SITANDTALK_KEYSTORE_PASSWORD }}
+          SITANDTALK_KEY_ALIAS: ${{ secrets.SITANDTALK_KEY_ALIAS }}
+          SITANDTALK_KEY_PASSWORD: ${{ secrets.SITANDTALK_KEY_PASSWORD }}
+          VERSION_CODE: ${{ github.run_number }}
+        run: ./gradlew --no-configuration-cache :app:assembleRelease :app:bundleRelease
+
+      - name: Verify APK signature
+        run: |
+          APKSIGNER=$(ls "$ANDROID_HOME"/build-tools/*/apksigner | sort -V | tail -1)
+          "$APKSIGNER" verify --print-certs app/build/outputs/apk/release/*.apk
+
+      - name: Upload release outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: sit-and-talk-release
+          path: |
+            app/build/outputs/apk/release/*.apk
+            app/build/outputs/bundle/release/*.aab
+          if-no-files-found: error
+
+      - name: Upload R8 mapping (kept private as a workflow artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: r8-mapping
+          path: app/build/outputs/mapping/release/
+          retention-days: 90
+
+      - name: Remove keystore
+        if: always()
+        run: rm -f "$RUNNER_TEMP/release.jks"

@@ -1,0 +1,14 @@
+{
+  "imports": {
+    "@supabase/supabase-js": "npm:@supabase/supabase-js@2.117.2",
+    "agora-token": "npm:agora-token@2.0.6"
+  },
+  "compilerOptions": {
+    "strict": true
+  },
+  "lint": {
+    "rules": {
+      "tags": ["recommended"]
+    }
+  }
+}

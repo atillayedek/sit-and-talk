@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name" translatable="false">Sit &amp; Talk</string>
+
+    <string name="tab_discover">Keşfet</string>
+    <string name="tab_rooms">Odalar</string>
+    <string name="tab_talk">Konuş</string>
+    <string name="tab_messages">Mesajlar</string>
+    <string name="tab_profile">Profil</string>
+
+    <string name="ongoing_call">Görüşme sürüyor</string>
+    <string name="ongoing_room">Odadasın: %1$s</string>
+    <string name="ongoing_return">Dön</string>
+
+    <string name="gate_config_title">Uygulama yapılandırılmamış</string>
+    <string name="gate_config_body">Bu derlemede sunucu bağlantı bilgileri eksik. Uygulama sahte içerik göstermez; geliştiricinin aşağıdaki değerleri tanımlaması gerekir.</string>
+    <string name="gate_config_missing">Eksik: %1$s</string>
+    <string name="gate_update_title">Güncelleme gerekli</string>
+    <string name="gate_update_body">Bu sürüm artık desteklenmiyor. Devam etmek için uygulamayı güncelle.</string>
+    <string name="gate_update_action">Mağazada aç</string>
+    <string name="gate_maintenance_title">Bakım çalışması</string>
+    <string name="gate_maintenance_default">Kısa bir bakım yapıyoruz. Lütfen biraz sonra tekrar dene.</string>
+    <string name="gate_retry">Tekrar dene</string>
+    <string name="gate_sign_out">Çıkış yap</string>
+    <string name="gate_error_title">Bağlanılamadı</string>
+    <string name="gate_suspended_title">Hesabın askıya alındı</string>
+    <string name="gate_suspended_body">Topluluk kurallarını ihlal ettiği değerlendirilen bir işlem nedeniyle hesabın geçici olarak kullanıma kapatıldı. Kararı inceleyip itiraz edebilirsin.</string>
+    <string name="gate_suspended_review">Kararı incele ve itiraz et</string>
+    <string name="link_not_configured">Bu sayfanın adresi henüz tanımlanmadı.</string>
+    <string name="link_no_browser">Bağlantıyı açacak bir uygulama bulunamadı.</string>
+    <string name="notification_permission_rationale">Mesaj ve arama bildirimlerini alabilmek için bildirim izni gerekir.</string>
+</resources>

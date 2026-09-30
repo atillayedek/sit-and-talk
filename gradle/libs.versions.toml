@@ -1,0 +1,111 @@
+# Every version is pinned. Compatibility notes live in docs/release.md.
+[versions]
+agp = "9.4.1"
+kotlin = "2.4.20"
+ksp = "2.3.12"
+hilt = "2.60.1"
+androidxHilt = "1.3.0"
+
+compileSdk = "37"
+targetSdk = "37"
+minSdk = "26"
+
+composeBom = "2026.09.00"
+materialIconsExtended = "1.7.8"
+activityCompose = "1.13.0"
+coreKtx = "1.17.0"
+lifecycle = "2.10.0"
+navigation = "2.9.5"
+room = "2.8.4"
+datastore = "1.1.7"
+work = "2.11.0"
+
+coroutines = "1.11.0"
+serialization = "1.11.0"
+ktor = "3.5.1"
+supabase = "3.8.0"
+coil = "3.3.0"
+
+agora = "4.6.4"
+billing = "8.0.0"
+firebaseMessaging = "25.0.0"
+credentials = "1.5.0"
+googleId = "1.1.1"
+
+junit = "4.13.2"
+
+[libraries]
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycle" }
+androidx-lifecycle-service = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycle" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "androidxHilt" }
+androidx-hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "androidxHilt" }
+androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "androidxHilt" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+androidx-work-runtime = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
+
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+compose-ui = { module = "androidx.compose.ui:ui" }
+compose-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose-foundation = { module = "androidx.compose.foundation:foundation" }
+compose-material3 = { module = "androidx.compose.material3:material3" }
+compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
+
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+
+supabase-bom = { module = "io.github.jan-tennert.supabase:bom", version.ref = "supabase" }
+supabase-auth = { module = "io.github.jan-tennert.supabase:auth-kt" }
+supabase-postgrest = { module = "io.github.jan-tennert.supabase:postgrest-kt" }
+supabase-realtime = { module = "io.github.jan-tennert.supabase:realtime-kt" }
+supabase-functions = { module = "io.github.jan-tennert.supabase:functions-kt" }
+supabase-storage = { module = "io.github.jan-tennert.supabase:storage-kt" }
+
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
+
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
+
+agora-rtc = { module = "io.agora.rtc:full-rtc-basic", version.ref = "agora" }
+play-billing = { module = "com.android.billingclient:billing-ktx", version.ref = "billing" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
+androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
+androidx-credentials-play = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
+google-id = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleId" }
+
+junit = { module = "junit:junit", version.ref = "junit" }
+
+# build-logic
+android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+compose-gradle-plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
+ksp-gradle-plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+hilt-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+
+sitandtalk-android-application = { id = "sitandtalk.android.application" }
+sitandtalk-android-library = { id = "sitandtalk.android.library" }
+sitandtalk-android-compose = { id = "sitandtalk.android.compose" }
+sitandtalk-android-hilt = { id = "sitandtalk.android.hilt" }
+sitandtalk-android-feature = { id = "sitandtalk.android.feature" }

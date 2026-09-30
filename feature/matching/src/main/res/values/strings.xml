@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="talk_mode_voice">Sesli</string>
+    <string name="talk_mode_video">Görüntülü</string>
+    <string name="talk_mode_text">Yazılı</string>
+    <string name="talk_start">Konuşmaya Başla</string>
+    <string name="talk_start_hint">Yeni biriyle anonim tanış.</string>
+    <string name="talk_joining">Sıraya giriliyor…</string>
+    <string name="talk_searching">Uygun kişi aranıyor</string>
+    <string name="talk_searching_body">Eşleşme bulunduğunda sana soracağız.</string>
+    <string name="talk_cancel">Vazgeç</string>
+    <string name="talk_found">Eşleşme bulundu</string>
+    <string name="talk_found_with">%1$s ile konuşmak ister misin?</string>
+    <string name="talk_common">Ortak noktalar</string>
+    <string name="talk_accept">Konuş</string>
+    <string name="talk_skip">Geç</string>
+    <string name="talk_waiting_peer">Karşı tarafın onayı bekleniyor…</string>
+    <string name="talk_seconds_left">%1$d sn</string>
+    <string name="talk_intent">Sohbet niyeti</string>
+    <string name="talk_intent_friends">Yeni arkadaş</string>
+    <string name="talk_intent_chat">Günlük sohbet</string>
+    <string name="talk_intent_gaming">Oyun arkadaşı</string>
+    <string name="talk_intent_language">Dil pratiği</string>
+    <string name="talk_intent_topic">Bir konuda konuşmak</string>
+    <string name="talk_intent_listen">Birini dinlemek</string>
+    <string name="talk_intent_note">Niyet yalnızca eşleşmeyi yönlendirir; profesyonel destek hizmeti değildir.</string>
+    <string name="talk_languages">Diller</string>
+    <string name="talk_strict_language">Yalnızca seçtiğim dillerde eşleş</string>
+    <string name="talk_alias">Bu görüşmedeki rumuzun</string>
+    <string name="talk_alias_hint">Karşı taraf yalnızca bu rumuzu görür.</string>
+    <string name="talk_preferences">Eşleşme tercihleri</string>
+    <string name="talk_video_disabled">Görüntülü eşleşme şu anda kapalı.</string>
+    <string name="talk_mode_disabled">Bu mod şu anda kapalı.</string>
+    <string name="talk_mic_needed">Sesli görüşme için mikrofon iznine ihtiyaç var.</string>
+    <string name="talk_camera_needed">Görüntülü görüşme için kamera ve mikrofon izni gerekiyor.</string>
+    <string name="talk_grant">İzin ver</string>
+    <string name="talk_open_settings">Ayarları aç</string>
+    <string name="talk_no_match_filters">Şu anda tercihlerinle eşleşen biri bulunamadı. Dil filtresini gevşetmeyi deneyebilirsin.</string>
+    <string name="talk_not_configured">Servis yapılandırması tamamlanmamış. Görüşme başlatılamaz.</string>
+    <string name="talk_preview">Kamera önizlemesi</string>
+    <string name="talk_notifications">Bildirimler</string>
+    <string name="talk_in_room">Önce sesli odadan ayrılmalısın.</string>
+    <string name="talk_leave_room">Odadan ayrıl</string>
+</resources>
