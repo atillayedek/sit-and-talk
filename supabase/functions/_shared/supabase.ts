@@ -27,12 +27,17 @@ export async function requireUser(req: Request): Promise<AuthedContext> {
     auth: { persistSession: false, autoRefreshToken: false },
     global: { headers: { authorization: `Bearer ${jwt}` } },
   });
-  // getClaims verifies the signature (asymmetric keys via the project's JWKS, legacy HS256 via the
-  // Auth server) and expiry, without depending on how the platform exposes the anon key.
-  const { data, error } = await db.auth.getClaims(jwt);
-  const claims = data?.claims as { sub?: string; email?: string; role?: string } | undefined;
-  if (error || !claims?.sub || claims.role !== "authenticated") {
-    console.warn(JSON.stringify({ level: "warn", event: "auth_rejected", reason: error?.message ?? "no_subject" }));
+  // The token is verified by PostgREST (which accepts the project's asymmetric signing keys), not by a
+  // call to /auth/v1 from inside the function: that route is not reliably reachable from the Edge runtime.
+  const claims = decodeJwtPayload(jwt) as { sub?: string; email?: string; role?: string; exp?: number };
+  const expired = typeof claims.exp !== "number" || claims.exp * 1000 <= Date.now();
+  if (!claims.sub || claims.role !== "authenticated" || expired) {
+    console.warn(JSON.stringify({ level: "warn", event: "auth_rejected", reason: expired ? "expired" : "bad_claims" }));
+    throw new ApiError(401, "unauthorized", "Invalid or expired session");
+  }
+  const { data: uid, error } = await db.rpc("auth_whoami");
+  if (error || uid !== claims.sub) {
+    console.warn(JSON.stringify({ level: "warn", event: "auth_rejected", reason: error ? `${error.code}: ${error.message}`.slice(0, 200) : "subject_mismatch" }));
     throw new ApiError(401, "unauthorized", "Invalid or expired session");
   }
   return { user: { id: claims.sub, email: claims.email }, jwt, db };
