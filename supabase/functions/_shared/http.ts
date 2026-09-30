@@ -126,9 +126,3 @@ export function timingSafeEqual(a: string, b: string): boolean {
   for (let i = 0; i < ea.length; i++) diff |= ea[i] ^ eb[i];
   return diff === 0;
 }
-
-export function requireInternalSecret(req: Request) {
-  const expected = requiredEnv("INTERNAL_HOOK_SECRET");
-  const given = req.headers.get("x-internal-secret") ?? "";
-  if (!timingSafeEqual(given, expected)) throw new ApiError(401, "unauthorized", "Unauthorized");
-}

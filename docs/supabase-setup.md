@@ -1,10 +1,9 @@
 # Supabase kurulumu
 
 > **Durum (30 Eylül 2026):** Şema ve Edge Function'lar `xcqcaaejpjumhhaqqwmd` (TalkRoom) projesine kuruldu,
-> `runtime_config` dolduruldu, pg_cron işi çalışıyor. Kalan adımlar: 2. bölümdeki secret'lar ve 4. bölümdeki
-> Auth ayarları. `INTERNAL_HOOK_SECRET` değeri veritabanında üretildi; SQL Editor'da
-> `select value from app_private.runtime_config where key = 'internal_hook_secret';` ile okunup function
-> secret'ı olarak aynen girilmeli.
+> `runtime_config` dolduruldu, pg_cron işi çalışıyor. Agora değerleri Vault'ta; `INTERNAL_HOOK_SECRET`
+> veritabanında üretildi ve fonksiyonlar tarafından `server_secret` RPC'siyle okunuyor (function secret'ı
+> olarak ayrıca girmek gerekmez). Kalan adımlar: FCM/Play secret'ları ve 4. bölümdeki Auth ayarları.
 
 Uygulama **mevcut** Supabase projesini kullanır; yeni proje açmak gerekmez. Migration'lar yalnızca
 yeni nesneler ekler (`create table`, `create or replace function`, politikalar); veri silen `drop`/`reset`

@@ -1,12 +1,12 @@
 // Periodic maintenance (cron via pg_net, or the scheduled GitHub workflow): removes Storage objects
 // whose owning rows were deleted (posts, stories, unsent messages, replaced avatars, deleted accounts).
-import { json, log, requireInternalSecret, serve } from "../_shared/http.ts";
-import { dbError, serviceClient } from "../_shared/supabase.ts";
+import { json, log, serve } from "../_shared/http.ts";
+import { dbError, requireInternalSecret, serviceClient } from "../_shared/supabase.ts";
 
 type CleanupItem = { id: number; bucket: string; path: string };
 
 serve(async (req, requestId) => {
-  requireInternalSecret(req);
+  await requireInternalSecret(req);
   const svc = serviceClient();
   let removed = 0;
   let failed = 0;

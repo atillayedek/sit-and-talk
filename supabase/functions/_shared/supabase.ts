@@ -1,5 +1,5 @@
 import { createClient, type SupabaseClient, type User } from "@supabase/supabase-js";
-import { ApiError, requiredEnv } from "./http.ts";
+import { ApiError, requiredEnv, timingSafeEqual } from "./http.ts";
 
 // Service-role client: bypasses RLS. Only used for server-owned writes and never exposed.
 export function serviceClient(): SupabaseClient {
@@ -55,4 +55,31 @@ export function decodeJwtPayload(jwt: string): Record<string, unknown> {
   } catch {
     return {};
   }
+}
+
+// Reads a server secret: the function environment first, then Supabase Vault through the service-role-only
+// `server_secret` RPC. Values are never logged or returned to clients.
+export async function serverSecret(name: string): Promise<string> {
+  const fromEnv = Deno.env.get(name)?.trim();
+  if (fromEnv) return fromEnv;
+  const { data, error } = await serviceClient().rpc("server_secret", { p_name: name });
+  if (error || typeof data !== "string" || data.trim() === "") {
+    throw new ApiError(503, "service_not_configured", `${name} is not configured`);
+  }
+  return data.trim();
+}
+
+export async function optionalServerSecret(name: string): Promise<string | null> {
+  try {
+    return await serverSecret(name);
+  } catch {
+    return null;
+  }
+}
+
+// Internal endpoints (database hooks, cron) authenticate with a shared secret header.
+export async function requireInternalSecret(req: Request) {
+  const expected = await serverSecret("INTERNAL_HOOK_SECRET");
+  const given = req.headers.get("x-internal-secret") ?? "";
+  if (!timingSafeEqual(given, expected)) throw new ApiError(401, "unauthorized", "Unauthorized");
 }

@@ -1,8 +1,8 @@
 // Delivers queued pushes through FCM HTTP v1. Invoked by the database (pg_net) or cron with
 // the internal hook secret. Pushes are data-only: the app renders them locally, localized, and
 // re-checks access when opened. Push is never the source of truth.
-import { json, log, requiredEnv, requireInternalSecret, serve } from "../_shared/http.ts";
-import { dbError, serviceClient } from "../_shared/supabase.ts";
+import { json, log, requiredEnv, serve } from "../_shared/http.ts";
+import { dbError, requireInternalSecret, serviceClient } from "../_shared/supabase.ts";
 import { googleAccessToken, loadServiceAccount } from "../_shared/google.ts";
 
 type Item = {
@@ -19,7 +19,7 @@ type Item = {
 };
 
 serve(async (req, requestId) => {
-  requireInternalSecret(req);
+  await requireInternalSecret(req);
   const svc = serviceClient();
   const projectId = requiredEnv("FCM_PROJECT_ID");
   const accessToken = await googleAccessToken(

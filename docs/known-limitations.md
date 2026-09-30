@@ -5,9 +5,10 @@
 - **Supabase:** Şema ve 7 Edge Function "TalkRoom" projesine (`xcqcaaejpjumhhaqqwmd`) kuruldu (30 Eylül 2026).
   Eski TalkRoom prototipinin tabloları silinmeden `talkroom_legacy` şemasına taşındı; eski `talkroom`
   fonksiyonu yerinde duruyor ama bu tablolara artık API üzerinden erişemez.
-- **Eksik function secret'ları:** `AGORA_APP_CERTIFICATE`, `AGORA_APP_ID`, `INTERNAL_HOOK_SECRET` (değeri
-  veritabanında hazır), FCM ve Play değerleri Dashboard'dan girilmeli; bağlantı aracı secret yazamıyor.
-  Certificate girilene kadar görüşme ve odalarda ses bağlantısı kurulamaz (`service_not_configured`).
+- **Sunucu secret'ları:** Agora App ID/Certificate Supabase Vault'ta; `INTERNAL_HOOK_SECRET` veritabanında
+  üretildi ve fonksiyonlar bunları `server_secret` RPC'siyle okur (bakım fonksiyonuyla uçtan uca doğrulandı).
+  FCM ve Play değerleri henüz yok: push ve satın alma kapalı. Agora token'ı gerçek bir kullanıcıyla
+  henüz üretilmedi (test kullanıcısı oluşturulmadı).
 - **Auth yönlendirmeleri:** Redirect URL listesi Dashboard'dan eklenmeli ([auth-callbacks.md](auth-callbacks.md));
   eklenmezse doğrulama bağlantısı uygulamayı açmaz. Sızdırılmış şifre koruması (HaveIBeenPwned) Dashboard'dan açılmalı.
 - **Firebase:** Proje yok; push bildirimleri kapalıdır. Uygulama bunu gizlemez: ayarlarda push "kullanılamıyor"

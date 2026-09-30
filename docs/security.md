@@ -7,7 +7,7 @@
 | Supabase URL, publishable/anon key | `local.properties` / Actions variable | Evet (genel değer; yetkiyi RLS belirler) |
 | Supabase service role key | Yalnızca Edge Function ortamı (platform sağlar) | **Hayır** |
 | Agora App ID | `local.properties` / Actions variable + function secret | Evet |
-| Agora App Certificate | Yalnızca function secret | **Hayır** |
+| Agora App Certificate | Function secret veya Supabase Vault (yalnızca `service_role` okuyabilir) | **Hayır** |
 | FCM / Play servis hesabı JSON | Yalnızca function secret | **Hayır** |
 | İmzalama keystore'u ve şifreleri | Actions secret (base64) | **Hayır**, depoya da girmez |
 

@@ -8,9 +8,19 @@
 | App Certificate | **Yalnızca** Supabase Edge Function secret'ı `AGORA_APP_CERTIFICATE` | Token imzalar. APK'ya, depoya, loglara veya ekran görüntülerine girmemeli. |
 | Customer ID / Secret (isteğe bağlı) | Edge Function secret'ları `AGORA_CUSTOMER_ID`, `AGORA_CUSTOMER_SECRET` | Odadan atılan kişiyi Agora kanalından da düşürmek için (kicking-rule REST API). |
 
+İki yol vardır; fonksiyonlar önce ortam değişkenine, yoksa Vault'a bakar (`public.server_secret`, yalnızca
+`service_role` çalıştırabilir):
+
 ```bash
+# 1) Edge Function secret'ı
 supabase secrets set AGORA_APP_ID=<app id> AGORA_APP_CERTIFICATE=<certificate> --project-ref <ref>
 ```
+```sql
+-- 2) Supabase Vault (veritabanında şifreli saklanır)
+select vault.create_secret('<certificate>', 'AGORA_APP_CERTIFICATE');
+```
+
+> TalkRoom projesinde (30 Eylül 2026) App ID ve Certificate Vault'a kaydedildi.
 
 Agora konsolunda projede **App Certificate açık** olmalı (token zorunlu mod). Konsoldaki "Generate Temp
 Token" yalnızca deneme içindir; uygulama bunu kullanmaz.

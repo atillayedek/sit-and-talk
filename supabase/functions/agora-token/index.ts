@@ -1,8 +1,8 @@
 // Issues short-lived Agora RTC tokens. Channel, UID and role come from the database
 // (public.rtc_authorize) — never from the request body.
 import agoraToken from "agora-token";
-import { ApiError, json, log, readJson, requiredEnv, requireString, serve, UUID_RE } from "../_shared/http.ts";
-import { dbError, requireUser } from "../_shared/supabase.ts";
+import { ApiError, json, log, readJson, requireString, serve, UUID_RE } from "../_shared/http.ts";
+import { dbError, requireUser, serverSecret } from "../_shared/supabase.ts";
 
 const { RtcTokenBuilder, RtcRole } = agoraToken;
 
@@ -24,8 +24,8 @@ serve(async (req, requestId) => {
   if (error) throw dbError(error);
   const auth = data as Authorization;
 
-  const appId = requiredEnv("AGORA_APP_ID");
-  const certificate = requiredEnv("AGORA_APP_CERTIFICATE");
+  const appId = await serverSecret("AGORA_APP_ID");
+  const certificate = await serverSecret("AGORA_APP_CERTIFICATE");
   const ttl = Math.min(Math.max(auth.ttl_seconds, 300), 3600);
   const role = auth.role === "publisher" ? RtcRole.PUBLISHER : RtcRole.SUBSCRIBER;
   const token = RtcTokenBuilder.buildTokenWithUid(appId, certificate, auth.channel_name, auth.uid, role, ttl, ttl);

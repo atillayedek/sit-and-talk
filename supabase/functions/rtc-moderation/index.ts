@@ -3,7 +3,7 @@
 // `agora_rest_not_configured`: the member is still removed from the room in the database and
 // cannot renew a token, but an already-connected client is only stopped when its token expires.
 import { ApiError, json, log, readJson, requireString, serve, UUID_RE } from "../_shared/http.ts";
-import { dbError, requireUser, serviceClient } from "../_shared/supabase.ts";
+import { dbError, optionalServerSecret, requireUser, serviceClient } from "../_shared/supabase.ts";
 
 serve(async (req, requestId) => {
   const { user, db } = await requireUser(req);
@@ -19,9 +19,9 @@ serve(async (req, requestId) => {
   const members = (room as { members: { user_id: string }[] }).members;
   if (members.some((m) => m.user_id === targetId)) throw new ApiError(409, "still_member", "Remove the member first");
 
-  const customerId = Deno.env.get("AGORA_CUSTOMER_ID");
-  const customerSecret = Deno.env.get("AGORA_CUSTOMER_SECRET");
-  const appId = Deno.env.get("AGORA_APP_ID");
+  const customerId = await optionalServerSecret("AGORA_CUSTOMER_ID");
+  const customerSecret = await optionalServerSecret("AGORA_CUSTOMER_SECRET");
+  const appId = await optionalServerSecret("AGORA_APP_ID");
   if (!customerId || !customerSecret || !appId) {
     return json(req, requestId, { code: "agora_rest_not_configured", enforced: false });
   }
