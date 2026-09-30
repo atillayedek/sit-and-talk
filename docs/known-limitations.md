@@ -2,10 +2,14 @@
 
 ## Dış erişim / yapılandırma eksikleri
 
-- **Supabase:** Bu çalışmada kullanılan Supabase bağlantısı "TalkRoom" projesini görmüyor; migration ve
-  fonksiyonlar yayınlanmadı. Yayın için [supabase-setup.md](supabase-setup.md).
-- **Agora:** App ID ve certificate kullanıcı tarafından sağlandı, ancak depoya konmadı. App ID derleme
-  değişkeni, certificate yalnızca Supabase function secret'ı olarak girilmeli ([agora-setup.md](agora-setup.md)).
+- **Supabase:** Şema ve 7 Edge Function "TalkRoom" projesine (`xcqcaaejpjumhhaqqwmd`) kuruldu (30 Eylül 2026).
+  Eski TalkRoom prototipinin tabloları silinmeden `talkroom_legacy` şemasına taşındı; eski `talkroom`
+  fonksiyonu yerinde duruyor ama bu tablolara artık API üzerinden erişemez.
+- **Eksik function secret'ları:** `AGORA_APP_CERTIFICATE`, `AGORA_APP_ID`, `INTERNAL_HOOK_SECRET` (değeri
+  veritabanında hazır), FCM ve Play değerleri Dashboard'dan girilmeli; bağlantı aracı secret yazamıyor.
+  Certificate girilene kadar görüşme ve odalarda ses bağlantısı kurulamaz (`service_not_configured`).
+- **Auth yönlendirmeleri:** Redirect URL listesi Dashboard'dan eklenmeli ([auth-callbacks.md](auth-callbacks.md));
+  eklenmezse doğrulama bağlantısı uygulamayı açmaz. Sızdırılmış şifre koruması (HaveIBeenPwned) Dashboard'dan açılmalı.
 - **Firebase:** Proje yok; push bildirimleri kapalıdır. Uygulama bunu gizlemez: ayarlarda push "kullanılamıyor"
   görünür. Arka planda gelen arama bildirimi push olmadan çalışmaz (uygulama açıkken Realtime ile çalışır).
 - **Google Play:** Ürünler, servis hesabı ve RTDN yok; `premium` ve `gifts` bayrakları kapalı.

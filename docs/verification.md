@@ -9,10 +9,12 @@
 | Migration'lar sıfırdan kurulum + RLS/RPC davranışı | PGlite, `supabase/tests/run.mjs` (31 kontrol) | Geçiyor |
 | Edge Function tip kontrolü ve lint | `deno check`, `deno lint` | Geçiyor |
 | Agora token üretimi | `agora-token` kütüphanesiyle yerel üretim | Token üretildi (Agora sunucusuna karşı denenmedi) |
+| Canlı veritabanı kurulumu | TalkRoom projesine 12 migration; MD5 ile doğrulanmış kaynak | 58 tablo, hepsinde RLS; `anon` yalnızca `app_bootstrap`; 5 bucket; pg_cron işi |
+| Canlı Edge Function açılış testi | 7 fonksiyona kimliksiz istek | Hepsi kendi hata gövdesiyle yanıt verdi (401 / 503 yapılandırma eksik) |
 
 ## Yapılmayan
 
-- Arka uç (migration + fonksiyonlar) hedef Supabase projesine **yayınlanmadı**.
+- Arka uç kuruldu ancak gerçek kullanıcı akışlarıyla (kayıt, eşleşme, oda) **denenmedi**.
 - Gerçek cihazda **hiçbir akış** denenmedi. "Derleniyor" "çalışıyor" anlamına gelmez.
 - Agora, FCM ve Google Play entegrasyonları gerçek servislere karşı denenmedi.
 

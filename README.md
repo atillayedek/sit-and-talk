@@ -10,8 +10,8 @@ yoktur: veritabanı boşsa ekranlar gerçek boş durumları gösterir.
 
 ## Durum
 
-Kod tamamlandı ve CI'da derleniyor; **henüz gerçek bir cihazda uçtan uca doğrulanmadı ve arka uç
-yayınlanmadı.** Ayrıntılar: [docs/verification.md](docs/verification.md),
+Kod tamamlandı ve CI'da derleniyor; arka uç TalkRoom Supabase projesine kuruldu. **Henüz gerçek bir cihazda
+uçtan uca doğrulanmadı** ve bazı sunucu secret'ları (Agora certificate, push, ödeme) girilmeyi bekliyor. Ayrıntılar: [docs/verification.md](docs/verification.md),
 [docs/known-limitations.md](docs/known-limitations.md), [docs/feature-matrix.md](docs/feature-matrix.md).
 
 ## Proje yapısı
@@ -37,7 +37,9 @@ docs/                  Mimari, kurulum, güvenlik, yayın belgeleri
 ## Hızlı başlangıç
 
 1. JDK 21 ve Android SDK kurulu olmalı.
-2. Kök dizinde `local.properties` oluştur (git'e girmez):
+2. Varsayılan olarak `app/public-config.properties` içindeki **genel** değerler (TalkRoom Supabase projesi
+   URL'si, publishable key, Agora App ID) kullanılır. Farklı bir arka uç için kök dizinde
+   `local.properties` oluştur (git'e girmez):
    ```properties
    SUPABASE_URL=https://<project-ref>.supabase.co
    SUPABASE_PUBLISHABLE_KEY=sb_publishable_...

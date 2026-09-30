@@ -443,7 +443,7 @@ begin
   end if;
   if exists (select 1 from pg_available_extensions where name = 'pg_net') then
     begin
-      create extension if not exists pg_net;
+      create extension if not exists pg_net with schema extensions;
     exception when others then
       raise notice 'pg_net not available (%); push delivery must be triggered by the scheduled workflow.', sqlerrm;
     end;

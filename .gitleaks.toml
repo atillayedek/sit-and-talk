@@ -4,7 +4,8 @@ title = "sit-and-talk gitleaks config"
 useDefault = true
 
 [allowlist]
-description = "Documentation placeholders"
+description = "Documentation placeholders and public client configuration (no secrets)"
 paths = [
   '''.*\.example''',
+  '''app/public-config\.properties''',
 ]

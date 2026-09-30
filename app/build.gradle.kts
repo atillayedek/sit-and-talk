@@ -14,8 +14,16 @@ val localProps = Properties().apply {
     if (file.exists()) file.inputStream().use(::load)
 }
 
+// Public defaults for the project's own backend; never secrets (see the file header).
+val publicDefaults = Properties().apply {
+    val file = file("public-config.properties")
+    if (file.exists()) file.inputStream().use(::load)
+}
+
 fun rawConfig(name: String): String =
-    (localProps.getProperty(name) ?: System.getenv(name) ?: "").trim()
+    localProps.getProperty(name)?.trim().orEmpty()
+        .ifEmpty { System.getenv(name)?.trim().orEmpty() }
+        .ifEmpty { publicDefaults.getProperty(name)?.trim().orEmpty() }
 
 // SUPABASE_ANON_KEY is accepted as a legacy alias of the publishable key.
 fun configValue(name: String): String = when (name) {
