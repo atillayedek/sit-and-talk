@@ -83,11 +83,12 @@ class MatchmakingController @Inject constructor(
     }
 
     private suspend fun handle(state: QueueState) {
+        val sessionId = state.sessionId
         when {
-            state.isInSession && state.sessionId != null -> {
+            state.isInSession && sessionId != null -> {
                 stopLoops()
                 _phase.value = MatchPhase.Idle
-                runCatching { calls.start(repository.state(state.sessionId)) }
+                runCatching { calls.start(repository.state(sessionId)) }
                     .onFailure { SafeLog.error("match", "session_load_failed", it) }
             }
             state.isMatched -> _phase.value = if (state.iAccepted) MatchPhase.WaitingForPeer(state) else MatchPhase.Found(state)

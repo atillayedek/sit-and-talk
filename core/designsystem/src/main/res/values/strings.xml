@@ -27,4 +27,18 @@
     <string name="ds_reason_other">Diğer</string>
     <string name="ds_logo_description">Sit &amp; Talk logosu</string>
     <string name="ds_time_left">Kalan süre %1$s</string>
+    <string name="ds_lang_tr">Türkçe</string>
+    <string name="ds_lang_en">İngilizce</string>
+    <string name="ds_lang_de">Almanca</string>
+    <string name="ds_lang_fr">Fransızca</string>
+    <string name="ds_lang_es">İspanyolca</string>
+    <string name="ds_lang_ar">Arapça</string>
+    <string name="ds_lang_ru">Rusça</string>
+    <string name="ds_lang_az">Azerbaycan Türkçesi</string>
+    <string name="ds_lang_ku">Kürtçe</string>
+    <string name="ds_lang_it">İtalyanca</string>
+    <string name="ds_lang_nl">Felemenkçe</string>
+    <string name="ds_lang_pt">Portekizce</string>
+    <string name="ds_lang_ja">Japonca</string>
+    <string name="ds_lang_ko">Korece</string>
 </resources>
