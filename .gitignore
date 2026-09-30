@@ -1,0 +1,35 @@
+# Gradle / Android
+.gradle/
+build/
+/local.properties
+local.properties
+*.iml
+.idea/
+.kotlin/
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.ap_
+*.dex
+output-metadata.json
+
+# Signing material and secrets — never commit
+*.jks
+*.keystore
+keystore.properties
+google-services.json
+.env
+.env.*
+!.env.example
+supabase/.temp/
+supabase/.branches/
+supabase/functions/.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node / tooling
+node_modules/
