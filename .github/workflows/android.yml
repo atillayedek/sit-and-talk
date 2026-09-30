@@ -59,17 +59,20 @@ jobs:
           set -o pipefail
           ./gradlew --no-configuration-cache --continue :app:assembleDebug 2>&1 | tee build.log
 
-      - name: Compiler errors summary
-        if: failure()
+      - name: Android lint
         shell: bash
         run: |
-          grep -E "^e: |^> Task .* FAILED|error: |ERROR:|What went wrong" build.log | sort -u | head -300 || true
-
-      - name: Android lint
-        run: ./gradlew --no-configuration-cache :app:lintDebug
+          set -o pipefail
+          ./gradlew --no-configuration-cache --continue :app:lintDebug 2>&1 | tee lint.log
 
       - name: Unit tests
         run: ./gradlew --no-configuration-cache testDebugUnitTest
+
+      - name: Build and lint errors summary
+        if: failure()
+        shell: bash
+        run: |
+          grep -hE "^e: |^> Task .* FAILED|error: |ERROR:|: Error: " build.log lint.log 2>/dev/null | sort -u | head -300 || true
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4

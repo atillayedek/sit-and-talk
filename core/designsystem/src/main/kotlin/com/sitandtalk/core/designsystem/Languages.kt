@@ -24,3 +24,19 @@ fun languageLabel(code: String): String = when (code) {
     "ko" -> stringResource(R.string.ds_lang_ko)
     else -> code.uppercase()
 }
+
+/** UI language, read observably so a locale change recomposes. */
+@Composable
+fun currentLanguage(): String =
+    androidx.compose.ui.platform.LocalConfiguration.current.locales.get(0)?.language ?: "tr"
+
+@Composable
+fun interestLabel(interest: com.sitandtalk.core.model.Interest): String =
+    if (currentLanguage() == "tr") interest.nameTr else interest.nameEn
+
+@Composable
+fun interestLabel(catalog: List<com.sitandtalk.core.model.Interest>, slug: String?): String? {
+    if (slug == null) return null
+    val interest = catalog.firstOrNull { it.slug == slug } ?: return slug
+    return interestLabel(interest)
+}

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="friends_title">Arkadaşlar</string>
+    <string name="friends_tab_friends">Arkadaşlar</string>
+    <string name="friends_tab_requests">İstekler</string>
+    <string name="friends_tab_blocked">Engellenenler</string>
+    <string name="friends_empty">Henüz arkadaşın yok.</string>
+    <string name="friends_empty_body">Bir görüşmede ikiniz de \"tekrar konuşalım\" derseniz ya da istek kabul edilirse burada görünür.</string>
+    <string name="friends_requests_empty">Bekleyen istek yok.</string>
+    <string name="friends_blocked_empty">Engellediğin kimse yok.</string>
+    <string name="friends_search">Kullanıcı adıyla ara</string>
+    <string name="friends_search_empty">Bu kullanıcı adıyla kimse bulunamadı.</string>
+    <string name="friends_online">Çevrim içi</string>
+    <string name="friends_last_seen">Son görülme: %1$s</string>
+    <string name="friends_message">Mesaj</string>
+    <string name="friends_voice_call">Sesli ara</string>
+    <string name="friends_video_call">Görüntülü ara</string>
+    <string name="friends_accept">Kabul et</string>
+    <string name="friends_decline">Reddet</string>
+    <string name="friends_cancel">Geri çek</string>
+    <string name="friends_outgoing">Gönderildi</string>
+    <string name="friends_unblock">Engeli kaldır</string>
+    <string name="friends_favorite">Favori</string>
+    <string name="friends_add">Arkadaş ekle</string>
+    <string name="friends_requested">İstek gönderildi</string>
+</resources>

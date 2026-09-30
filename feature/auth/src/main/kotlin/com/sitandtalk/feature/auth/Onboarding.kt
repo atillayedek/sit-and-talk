@@ -51,6 +51,7 @@ import com.sitandtalk.core.designsystem.StTopBar
 import com.sitandtalk.core.designsystem.SupportedLanguages
 import com.sitandtalk.core.designsystem.ToggleChip
 import com.sitandtalk.core.designsystem.errorMessage
+import com.sitandtalk.core.designsystem.interestLabel
 import com.sitandtalk.core.designsystem.languageLabel
 import com.sitandtalk.core.model.AppException
 import com.sitandtalk.core.model.Interest
@@ -213,7 +214,7 @@ fun OnboardingScreen(onCompleted: () -> Unit, onSignOut: () -> Unit, viewModel: 
                         catalog != null -> FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             catalog.forEach { interest ->
                                 ToggleChip(
-                                    label = if (Locale.getDefault().language == "tr") interest.nameTr else interest.nameEn,
+                                    label = interestLabel(interest),
                                     selected = interest.slug in state.interests,
                                     onClick = { viewModel.toggleInterest(interest.slug) },
                                 )
